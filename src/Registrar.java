@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Registrar {
     ArrayList<Student> students;
@@ -48,6 +49,63 @@ public class Registrar {
         enrollmentResult = course2.enrollStudent(student2, "C02");
         TerminalPrinter.printEnrollmentResult(enrollmentResult, student2.getName(),
                 course2.getUniqueName(), "C02");
+    }
+
+    /**
+     * The main function that reads the input, saves the data to the database and outputs the
+     * result to standard output.
+     */
+    public void run() {
+        Scanner sc = new Scanner(System.in);
+        String[] inputList = sc.nextLine().split(" ");
+        String command;
+
+        do {
+            command = inputList[0];
+
+            switch(command) {
+                // Course command
+                case "COURSE":
+
+
+                    inputList = sc.nextLine().split(" ");
+                    break;
+
+                // Student command
+                case "STUDENT":
+
+                    inputList = sc.nextLine().split(" ");
+                    break;
+
+                // Section command
+                case "SECTION":
+
+                    inputList = sc.nextLine().split(" ");
+                    break;
+
+                // Enroll command
+                case "ENROLL":
+
+                    inputList = sc.nextLine().split(" ");
+                    break;
+
+                // UnEnroll command
+                case "UNENROLL":
+
+                    inputList = sc.nextLine().split(" ");
+                    break;
+
+                // Requirement command
+                case "REQUIREMENT":
+
+                    inputList = sc.nextLine().split(" ");
+                    break;
+
+            }
+
+
+        } while (!inputList[0].equals("FINISH"));
+
     }
 }
 
