@@ -19,10 +19,29 @@ public class Section {
     }
 
     public boolean unenrollStudent(Student student) {
-        return enrolledStudents.remove(student);
+        ArrayList<Student> newEnrolledList = new ArrayList<>();
+        boolean result = false;
+
+        for (Student s : enrolledStudents) {
+            if (s.getStudentID() != student.getStudentID()) {
+                newEnrolledList.add(s);
+            } else {
+                result = true;
+            }
+        }
+        enrolledStudents = newEnrolledList;
+
+        return result;
     }
 
     public String getSectionName() {
         return sectionName;
+    }
+
+    /**
+     * @return The list of enrolled students
+     */
+    public ArrayList<Student> getEnrolledStudents() {
+        return enrolledStudents;
     }
 }

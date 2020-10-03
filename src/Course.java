@@ -46,4 +46,19 @@ public class Course {
         }
         return -1;
     }
+
+    /**
+     * Checks if a student is enrolled in any sections of the course
+     * @return Boolean
+     */
+    public boolean isEnrolled(Student student) {
+        for (Section section : sections) {
+            for (Student s : section.getEnrolledStudents()) {
+                if (s.getStudentID() == student.getStudentID()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

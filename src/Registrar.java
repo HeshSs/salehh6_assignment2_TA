@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Registrar {
@@ -39,6 +40,21 @@ public class Registrar {
             }
         }
         return null;
+    }
+
+    /**
+     * Checks if the given student is taking/has taken all the required courses of the given course.
+     * @param course Course that has required courses
+     * @param student Student
+     * @return Boolean
+     */
+    public boolean hasRequiredCourses(Course course, Student student) {
+        for (Course c : requiredCourses.get(course)) {
+            if (!c.isEnrolled(student)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /* Hardcoded example. Instead, you need to implement new functions that read
@@ -125,10 +141,21 @@ public class Registrar {
                     // find the course
                     Course course = getCourse(inputList[2]);
 
-                    // enroll the student in the appropriate section
-                    boolean enrollmentResult = course.enrollStudent(student, inputList[3]);
+                    boolean enrollmentResult;
+
+                    /* If the course doesn't have any required courses, just enroll the student
+                    else if the course has required courses, check if the student is enrolled in those
+                    courses first then enroll him/her
+                     */
+                    if (!requiredCourses.containsKey(course)) {
+                        enrollmentResult = course.enrollStudent(student, inputList[3]);
+                    } else {
+                        enrollmentResult = course.enrollStudent(student, inputList[3])
+                                && hasRequiredCourses(course, student);
+                    }
                     TerminalPrinter.printEnrollmentResult(enrollmentResult, student.getName(),
                             course.getUniqueName(), inputList[3]);
+
                     break;
 
                 // UNENROLL studentID CourseName section
@@ -139,14 +166,40 @@ public class Registrar {
                     // find the course
                     Course course1 = getCourse(inputList[2]);
 
-                    boolean unenrollmentResult = course1.unenrollStudent(student1, inputList[3]);
+
+                    // Check the loophole
+                    boolean isRequired = true;
+
+                    /*
+                    Checks if the course is required for any other course and if it is,
+                    is the student enrolled in that class.
+                     */
+                    for (Map.Entry<Course, ArrayList<Course>> entry : requiredCourses.entrySet()) {
+                        for (Course c : entry.getValue()) {
+                            if (course1.getUniqueName().equals(c.getUniqueName())) {
+                                isRequired = !entry.getKey().isEnrolled(student1);
+                            }
+                        }
+                    }
+
+                    boolean unenrollmentResult = isRequired && course1.unenrollStudent(student1, inputList[3]);
                     TerminalPrinter.printUnenrollmentResult(unenrollmentResult, student1.getName(),
                             course1.getUniqueName(), inputList[3]);
                     break;
 
                 // REQUIREMENT courseName requiredCourseName
                 case "REQUIREMENT":
+                    // find the course and required course
+                    Course course2 = getCourse(inputList[1]);
+                    Course requiredCourse = getCourse(inputList[2]);
 
+                    // Check if the list is already initiated
+                    if (!requiredCourses.containsKey(course2)) {
+                        requiredCourses.put(course2, new ArrayList<>());
+                    }
+
+                    // Add the required course to the list of required courses
+                    requiredCourses.get(course2).add(requiredCourse);
                     break;
 
             }
