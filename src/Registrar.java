@@ -150,8 +150,8 @@ public class Registrar {
                     if (!requiredCourses.containsKey(course)) {
                         enrollmentResult = course.enrollStudent(student, inputList[3]);
                     } else {
-                        enrollmentResult = course.enrollStudent(student, inputList[3])
-                                && hasRequiredCourses(course, student);
+                        enrollmentResult = hasRequiredCourses(course, student)
+                            && course.enrollStudent(student, inputList[3]);
                     }
                     TerminalPrinter.printEnrollmentResult(enrollmentResult, student.getName(),
                             course.getUniqueName(), inputList[3]);
